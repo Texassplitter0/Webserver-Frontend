@@ -2,7 +2,7 @@ services:
   webserver:
     build: .
     ports:
-      - "8080:80"
+      - "10100:80"
     volumes:
       - ./frontend:/frontend:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
