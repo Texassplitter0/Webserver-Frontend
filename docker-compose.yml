@@ -2,8 +2,7 @@ services:
   webserver:
     build: .
     ports:
-      - "10100:80"
+      - "10100:10100"
     volumes:
       - ./frontend:/frontend:ro
-      - ./nginx.conf:/app/nginx/nginx.conf:ro
-    container_name: static-webserver
+    container_name: node-static-webserver
