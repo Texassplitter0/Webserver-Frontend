@@ -3,7 +3,5 @@ services:
     build: .
     ports:
       - "10100:80"
-    volumes:
-      - ./frontend:/frontend:ro
     container_name: node-static-webserver
     pull_policy: build
