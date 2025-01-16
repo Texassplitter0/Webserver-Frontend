@@ -17,4 +17,3 @@ EXPOSE 10100
 
 # Starte den HTTP-Server auf Port 10100
 CMD ["http-server", "-p", "10100"]
-
