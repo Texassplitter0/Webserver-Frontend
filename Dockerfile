@@ -1,23 +1,26 @@
+# Base image
 FROM node:alpine
 
-# Entfernt /docker-entrypoint und nginx überbleibsel
+# Remove unnecessary files
 RUN rm -rf /docker-entrypoint.d/ /etc/nginx/
 
-# Installiere den HTTP-Server
+# Install HTTP-Server
 RUN npm install -g http-server
 
-# Kopiere die HTML-Dateien ins Verzeichnis /frontend
+# Copy frontend files
 COPY ./frontend /frontend
 
-# Setze das Arbeitsverzeichnis
+# Add SSL certificates
+COPY ./certs /certs
+
+# Set working directory
 WORKDIR /frontend
 
-# Setze Berechtigungen für das /frontend-Verzeichnis
+# Set permissions
 RUN chmod -R 755 /frontend && chown -R node:node /frontend
 
-# Expose Port 10100
+# Expose port for HTTPS
 EXPOSE 10100
 
-# Starte den HTTP-Server auf Port 10100
-CMD ["sh", "-c", "find / -name '*.html' && http-server -p 10100"]
-
+# Start HTTP-Server with HTTPS enabled
+CMD ["http-server", "-S", "-C", "/certs/cert.pem", "-K", "/certs/key.pem", "-p", "10100"]s
