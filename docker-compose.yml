@@ -2,7 +2,7 @@ services:
   webserver:
     build: .
     ports:
-      - "10100:10100"
+      - "10100:80"
     volumes:
       - ./frontend:/frontend:ro
     container_name: node-static-webserver
