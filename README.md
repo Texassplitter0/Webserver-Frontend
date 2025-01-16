@@ -1,79 +1,96 @@
-# Static Webserver in Docker
+# Node.js Static Webserver in Docker
 
-This project provides a simple static web server running in a Docker container using Nginx. It serves HTML files from the `/frontend` directory.
+Dieses Projekt stellt einen einfachen statischen Webserver bereit, der HTML-Dateien mit Node.js und dem Paket `http-server` bedient. Der Webserver läuft in einem Docker-Container und nutzt den Port **10100**.
 
-## Project Structure
+## Projektstruktur
 ```
 static-webserver/
-├── frontend/                # Directory containing HTML files
-│   ├── index.html       # Home page
-│   └── about.html       # Example secondary page
-├── nginx.conf           # Nginx configuration file
-├── Dockerfile           # Dockerfile to build the Nginx image
-├── docker-compose.yml   # Docker Compose configuration
-└── README.md            # This documentation file
+├── frontend/           # Ordner mit HTML-Dateien
+├── Dockerfile          # Dockerfile für den Node.js-Webserver
+├── docker-compose.yml  # Docker Compose Konfigurationsdatei
+├── README.md           # Diese Dokumentation
 ```
 
-## Prerequisites
-- Docker installed on your machine.
-- Docker Compose installed (optional, but recommended).
+## Voraussetzungen
+- **Docker** installiert
+- **Docker Compose** installiert (optional, für die Nutzung der `docker-compose.yml`)
 
-## Setup Instructions
+## Anleitung
 
-### 1. Clone the Repository
-Clone or download this repository to your local machine.
+### 1. HTML-Dateien vorbereiten
+Füge deine HTML-Dateien und andere statischen Inhalte (z. B. CSS, Bilder) in den Ordner `frontend/` ein. Stelle sicher, dass mindestens eine `index.html` vorhanden ist.
 
-### 2. Add Your HTML Files
-Place your HTML files in the `html/` directory. Ensure there is an `index.html` file as the entry point.
+### 2. Docker-Image erstellen
+Baue das Docker-Image mit folgendem Befehl:
+```bash
+docker build -t node-static-server .
+```
 
-### 3. Update Configuration (Optional)
-If necessary, modify the `nginx.conf` file to customize the server configuration.
+### 3. Container starten
 
-### 4. Build and Run the Docker Container
+#### Mit Docker direkt
+Starte den Container:
+```bash
+docker run -d -p 10100:10100 --name static-webserver node-static-server
+```
 
-#### Using Docker Only
-1. Build the Docker image:
-   ```bash
-   docker build -t static-webserver .
-   ```
-2. Run the container:
-   ```bash
-   docker run -d -p 10100:80 --name webserver static-webserver
-   ```
+#### Mit Docker Compose
+Starte den Webserver über Docker Compose:
+```bash
+docker-compose up -d
+```
 
-#### Using Docker Compose
-1. Start the server:
-   ```bash
-   docker-compose up -d
-   ```
-
-### 5. Access the Webserver
-Open a browser and go to:
+### 4. Zugriff auf die Website
+Öffne deinen Browser und gehe zu:
 ```
 http://localhost:10100
 ```
 
-## File Locations in the Container
-- HTML files: `/frontend`
-- Nginx configuration: `/app/nginx/nginx.conf`
+## Konfiguration
 
-## Customization
-### Changing the Root Directory
-To use a different directory for your HTML files, update the `root` directive in `nginx.conf` and the `volumes` section in `docker-compose.yml`.
+### Port ändern
+Um den Port zu ändern, bearbeite die folgenden Dateien:
+- In der `Dockerfile` ändere den Port im Befehl:
+  ```dockerfile
+  CMD ["http-server", "-p", "10100"]
+  ```
+- In der `docker-compose.yml` aktualisiere den `ports`-Abschnitt:
+  ```yaml
+  ports:
+    - "NEUER_PORT:10100"
+  ```
 
-### Adding Error Pages
-To add a custom 404 error page, place a `404.html` file in the `html/` directory.
+### Volumes
+Wenn du deine Dateien außerhalb des Containers live bearbeiten möchtest, überprüfe den `volumes`-Eintrag in der `docker-compose.yml`. Hierdurch wird der Ordner `frontend/` direkt eingebunden.
 
-## Stopping and Removing the Container
-1. Stop the container:
-   ```bash
-   docker-compose down
-   ```
-2. Remove the container:
-   ```bash
-   docker rm -f webserver
-   ```
+## Container stoppen
+Um den Webserver zu stoppen, verwende:
 
-## License
-This project is available under the MIT License. Feel free to use and adapt it for your needs.
+#### Mit Docker direkt
+```bash
+docker stop static-webserver
+```
+
+#### Mit Docker Compose
+```bash
+docker-compose down
+```
+
+## Fehlerbehebung
+
+### Keine Inhalte angezeigt
+- Stelle sicher, dass sich eine `index.html` im Ordner `frontend/` befindet.
+- Überprüfe die Berechtigungen des Ordners `frontend/` und setze sie gegebenenfalls:
+  ```bash
+  chmod -R 755 frontend
+  ```
+
+### Port wird bereits verwendet
+Ändere den Host-Port in der `docker-compose.yml` oder beim Startbefehl:
+```bash
+docker run -d -p NEUER_PORT:10100 --name static-webserver node-static-server
+```
+
+## Lizenz
+Dieses Projekt steht unter der MIT-Lizenz. Du kannst es frei verwenden, anpassen und teilen.
 
