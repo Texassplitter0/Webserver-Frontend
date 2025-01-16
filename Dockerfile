@@ -1,14 +1,16 @@
-FROM nginx:alpine
+FROM node:alpine
 
-# Berechtigungen erteilen
-RUN chmod -R 755 /frontend && chown -R nginx:nginx /frontend
+# Installiere den HTTP-Server
+RUN npm install -g http-server
 
-# Kopiere die HTML-Dateien ins Standardverzeichnis von Nginx
+# Kopiere die HTML-Dateien ins Verzeichnis /frontend
 COPY ./frontend /frontend
-COPY ./nginx.conf /app/nginx/nginx.conf
 
-# Standard-Port für Nginx
-EXPOSE 80
+# Setze das Arbeitsverzeichnis
+WORKDIR /frontend
 
-# Starte den Nginx-Server
-CMD ["nginx", "-g", "daemon off;"]
+# Expose Port 10100
+EXPOSE 10100
+
+# Starte den HTTP-Server auf Port 10100
+CMD ["http-server", "-p", "10100"]
