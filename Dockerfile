@@ -1,5 +1,8 @@
 FROM node:alpine
 
+# Entfernt /docker-entrypoint und nginx überbleibsel
+RUN rm -rf /docker-entrypoint.d/ /etc/nginx/
+
 # Installiere den HTTP-Server
 RUN npm install -g http-server
 
@@ -16,4 +19,4 @@ RUN chmod -R 755 /frontend && chown -R node:node /frontend
 EXPOSE 10100
 
 # Starte den HTTP-Server auf Port 10100
-CMD ["http-server", "-p", "10100"]
+CMD ["sh", "-c", "ls -l /frontend && http-server -p 10100"]
