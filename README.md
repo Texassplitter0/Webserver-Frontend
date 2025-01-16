@@ -55,7 +55,7 @@ http://localhost:10100
 
 ## File Locations in the Container
 - HTML files: `/frontend`
-- Nginx configuration: `/etc/nginx/nginx.conf`
+- Nginx configuration: `/app/nginx/nginx.conf`
 
 ## Customization
 ### Changing the Root Directory
