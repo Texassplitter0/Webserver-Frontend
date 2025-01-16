@@ -38,7 +38,7 @@ If necessary, modify the `nginx.conf` file to customize the server configuration
    ```
 2. Run the container:
    ```bash
-   docker run -d -p 8080:80 --name webserver static-webserver
+   docker run -d -p 10100:80 --name webserver static-webserver
    ```
 
 #### Using Docker Compose
@@ -50,7 +50,7 @@ If necessary, modify the `nginx.conf` file to customize the server configuration
 ### 5. Access the Webserver
 Open a browser and go to:
 ```
-http://localhost:8080
+http://localhost:10100
 ```
 
 ## File Locations in the Container
